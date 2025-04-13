@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
+import { useAppContext } from "../Contexts/AppContext";
 
 export const ProductCard = ({ product }) => {
     const [count, setCount] = useState(0);
+
+    const { currencySymbol } = useAppContext()
 
     return (
         <div className="border border-gray-200 rounded-md md:px-4 px-3 py-2 bg-white min-w-56 max-w-56 w-full">
@@ -31,7 +34,7 @@ export const ProductCard = ({ product }) => {
 
                 <div className="flex items-end justify-between mt-3">
                     <p className="md:text-xl text-base font-medium text-green-700">
-                        ${product.offerPrice} <span className="text-gray-500/60 md:text-sm text-xs line-through">${product.price}</span>
+                        {currencySymbol} {product.offerPrice} <span className="text-gray-500/60 md:text-sm text-xs line-through">{currencySymbol} {product.price}</span>
                     </p>
                     <div className="text-green-700">
                         {
