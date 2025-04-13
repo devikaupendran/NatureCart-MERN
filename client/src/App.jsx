@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import Home from './Pages/Home'
 import OurProducts from './Pages/OurProducts'
 import Navbar from './Components/Navbar'
-
+import Footer from './Components/Footer'
 
 const App = () => {
 
@@ -26,6 +26,8 @@ const App = () => {
                 </Routes>
             </div>
 
+            {/* if it is not seller path then show this footer  */}
+            {!isSellerPath && <Footer />}
         </div>
     )
 }
