@@ -5,17 +5,18 @@ import Home from './Pages/Home'
 import OurProducts from './Pages/OurProducts'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
+import { useAppContext } from './Contexts/AppContext'
+import Login from './Components/Login'
 
 const App = () => {
 
-    // if the path contain 'seller' then this will be true 
-    const isSellerPath = useLocation().pathname.includes('seller');
-    console.log(isSellerPath)
+    const isSellerPath = useLocation().pathname.includes('seller');   // if the path contain 'seller' then this will be true 
+    const { showUserLogin } = useAppContext();
 
     return (
         <div>
-            {/* if it is seller then dont show this navbar  */}
-            {isSellerPath ? null : <Navbar />}
+            {isSellerPath ? null : <Navbar />} {/* if it is seller then dont show this navbar  */}
+            {showUserLogin ? <Login /> : null} {/* when the showUserLogin will be true then only display the login form  */}
 
             <Toaster position="top-center" reverseOrder={false} />
 
@@ -26,8 +27,7 @@ const App = () => {
                 </Routes>
             </div>
 
-            {/* if it is not seller path then show this footer  */}
-            {!isSellerPath && <Footer />}
+            {!isSellerPath && <Footer />}   {/* if it is not seller path then show this footer  */}
         </div>
     )
 }
