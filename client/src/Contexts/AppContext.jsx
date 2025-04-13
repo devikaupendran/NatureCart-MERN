@@ -16,7 +16,7 @@ export const AppContextProvider = ({ children }) => {
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
     const [cartItems, setCartItems] = useState({});
-    
+    const [searchQuery, setSearchQuery] = useState({});
 
     //fetch all products from asset file when page load 
     const fetchProducts = async () => {
@@ -69,6 +69,7 @@ export const AppContextProvider = ({ children }) => {
         showUserLogin, setShowUserLogin,
         products, setProducts,
         cartItems, addToCart, updateCartitem, removeCartItem,
+        searchQuery, setSearchQuery
     }
     return (
         <AppContext.Provider value={value}>
