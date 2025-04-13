@@ -3,7 +3,9 @@ import { assets, categories } from '../assets/assets'
 import { useAppContext } from '../Contexts/AppContext'
 
 const Categories = () => {
-    const { navigate } = useAppContext()
+
+    const { navigate } = useAppContext();
+    
     return (
         <div className='mt-16'>
             <p className='text-2xl md:text-3xl font-medium'>Categories</p>
