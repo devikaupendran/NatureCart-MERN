@@ -33,13 +33,18 @@ export const ProductCard = ({ product }) => {
 
 
                 <div className="flex items-end justify-between mt-3">
+
+                    {/* --------- Price --------- */}
                     <p className="md:text-xl text-base font-medium text-green-700">
                         {currencySymbol} {product.offerPrice} <span className="text-gray-500/60 md:text-sm text-xs line-through">{currencySymbol} {product.price}</span>
                     </p>
-                    <div className="text-green-700">
+
+                    {/* --------- add to cart and quantity --------- */}
+                    <div className="text-green-700" onClick={(e) => { e.stopPropagation() }}>
                         {
                             count === 0 ? (
-                                <button className="flex items-center justify-center gap-1 bg-green-100 border border-green-300 md:w-[80px] w-[64px] h-[34px] rounded text-green-700 font-medium" onClick={() => setCount(1)} >
+                                <button className="flex items-center justify-center gap-1 bg-green-100 border border-green-300 md:w-[80px] w-[64px] h-[34px] rounded text-green-700 font-medium"
+                                    onClick={() => setCount(1)} >
                                     <img src={assets.cart_icon} alt="cart" />
                                     Add
                                 </button>
