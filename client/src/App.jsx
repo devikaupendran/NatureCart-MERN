@@ -8,10 +8,13 @@ const App = () => {
     return (
         <div>
             <Navbar />
-            <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/products' element={<OurProducts />} />
-            </Routes>
+            <div className={`px-6 md:px-16 lg:px-24 xl:px-30`} >
+
+                <Routes>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/products' element={<OurProducts />} />
+                </Routes>
+            </div>
         </div>
     )
 }
