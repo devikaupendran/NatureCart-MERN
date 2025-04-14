@@ -7,6 +7,7 @@ import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import { useAppContext } from './Contexts/AppContext'
 import Login from './Components/Login'
+import ProductCategory from './Pages/ProductCategory'
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/products' element={<OurProducts />} />
+                    <Route path='/products/:category' element={<ProductCategory />} />
                 </Routes>
             </div>
 
