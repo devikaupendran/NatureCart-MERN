@@ -9,7 +9,7 @@ export const ProductCard = ({ product }) => {
     //if the product is available then only show this
     return product && (
         <div onClick={() => {
-            navigate(`/products/${category.toLowerCase()}/${product._id}`);
+            navigate(`/products/${product.category.toLowerCase()}/${product._id}`);
             scrollTo(0, 0);
         }}
             className='flex justify-center'>
