@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { assets } from '../assets/assets';
 import { useAppContext } from '../Contexts/AppContext';
 import { Link, useParams } from 'react-router-dom';
+import ProductCard from '../Components/ProductCard';
 
 const ProductDetails = () => {
 
@@ -87,6 +88,7 @@ const ProductDetails = () => {
                             <li key={index}>{desc}</li>
                         ))}
                     </ul>
+
                     {/* ------------- Add to cart and Buy now button ------------- */}
                     <div className="flex items-center mt-10 gap-4 text-base">
                         <button onClick={() => addToCart(product._id)}
@@ -105,7 +107,35 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div>
+
+            {/* ------------- Related Products ------------- */}
+            <div className='flex flex-col items-center mt-20'>
+
+                {/* -------- title -------- */}
+                <div className='flex flex-col items-center w-max'>
+                    <p className='text-3xl font-medium'>Related Products</p>
+                    <div className='w-20 h-0.5 bg-green-700 rounded-full mt-2'></div>
+                </div>
+
+                {/* -------- products -------- */}
+                <div className='flex justify-center'>
+                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6 mt-6'>
+                        {
+                            relatedProducts.filter((product) => product.inStock)
+                                .map((product, index) => (<ProductCard key={index} product={product} />))
+                        }
+                    </div>
+                </div>
+
+                <button onClick={() => {
+                    navigate('/products');
+                    scrollTo(0, 0)
+                }}
+                    className='mx-auto cursor-pointer px-12 my-16 py-2.5 border rounded text-green-700 hover:bg-green-100 transition '>See More</button>
+
+            </div>
         </div>
+
 
     )
 }
