@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { assets } from '../assets/assets';
 import { useAppContext } from '../Contexts/AppContext';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const ProductDetails = () => {
 
@@ -32,9 +32,9 @@ const ProductDetails = () => {
 
             {/* Breadcrumbs */}
             <p>
-                <span>Home</span> /
-                <span> Products</span> /
-                <span> {product.category}</span> /
+                <Link to={'/'}>Home</Link> /
+                <Link to={'/products'}> Products</Link> /
+                <Link to={`/products/${product.category.toLowerCase()}`}> {product.category}</Link> /
                 <span className="text-green-700"> {product.name}</span>
             </p>
 
@@ -42,11 +42,14 @@ const ProductDetails = () => {
             <div className="flex flex-col md:flex-row gap-16 mt-4">
                 <div className="flex gap-3">
                     <div className="flex flex-col gap-3">
-                        {product.image.map((image, index) => (
-                            <div key={index} onClick={() => setThumbnail(image)} className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer" >
-                                <img src={image} alt={`Thumbnail ${index + 1}`} />
-                            </div>
-                        ))}
+                        {
+                            product.image.map((image, index) => (
+                                <div key={index} onClick={() => setThumbnail(image)}
+                                    className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer" >
+                                    <img src={image} alt={`Thumbnail ${index + 1}`} />
+                                </div>
+                            ))
+                        }
                     </div>
 
                     <div className="border border-gray-500/30 max-w-100 rounded overflow-hidden">
@@ -66,14 +69,14 @@ const ProductDetails = () => {
                                     <img key={i} className='md:w-3.5 w-3' src={i < 4 ? assets.star_icon : assets.star_dull_icon} alt='star' />
                                 ))
                             }
-                            <p>4</p>
+                            <p>(4)</p>
                         </div>
                     </div>
 
                     {/* price and offer price section */}
                     <div className="mt-6">
-                        <p className="text-gray-500/70 line-through">MRP: ${product.price}</p>
-                        <p className="text-2xl font-medium">MRP: ${product.offerPrice}</p>
+                        <p className="text-gray-500/70 line-through">MRP: {currencySymbol} {product.price}</p>
+                        <p className="text-2xl font-medium">MRP: {currencySymbol} {product.offerPrice}</p>
                         <span className="text-gray-500/70">(inclusive of all taxes)</span>
                     </div>
 
@@ -84,12 +87,19 @@ const ProductDetails = () => {
                             <li key={index}>{desc}</li>
                         ))}
                     </ul>
-                    {/* Add to cart and Buy now nutton */}
+                    {/* ------------- Add to cart and Buy now button ------------- */}
                     <div className="flex items-center mt-10 gap-4 text-base">
-                        <button className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
+                        <button onClick={() => addToCart(product._id)}
+                            className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
                             Add to Cart
                         </button>
-                        <button className="w-full py-3.5 cursor-pointer font-medium bg-green-700 text-white hover:bg-green-600 transition" >
+
+                        <button onClick={() => {
+                            addToCart(product._id);
+                            navigate('/cart');
+                            scrollTo(0, 0)
+                        }}
+                            className="w-full py-3.5 cursor-pointer font-medium bg-green-700 text-white hover:bg-green-600 transition" >
                             Buy now
                         </button>
                     </div>
