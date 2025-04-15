@@ -8,7 +8,11 @@ export const ProductCard = ({ product }) => {
 
     //if the product is available then only show this
     return product && (
-        <div className='flex justify-center'>
+        <div onClick={() => {
+            navigate(`/products/${category.toLowerCase()}/${product._id}`);
+            scrollTo(0, 0);
+        }}
+            className='flex justify-center'>
             <div className="border border-gray-200 rounded-md md:px-4 px-3 py-2 bg-white min-w-56 max-w-56 w-full">
 
                 {/* --------- image --------- */}
