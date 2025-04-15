@@ -1,62 +1,40 @@
-import React, { useState } from 'react'
-import { assets } from '../assets/assets';
+import React, { useEffect, useState } from 'react'
+import { assets, dummyAddress } from '../assets/assets';
+import { useAppContext } from '../Contexts/AppContext';
 
 const Cart = () => {
-    const [showAddress, setShowAddress] = useState(false)
+    const { products, navigate, currencySymbol, cartItems, updateCartitem, removeCartItem, getCartItemCount, getCartItemAmount } = useAppContext();
 
-    const products = [
-        // existing products...
+    const [cartArray, setCartArray] = useState([]);
+    const [addresses, setAddresses] = useState(dummyAddress);
+    const [showAddress, setShowAddress] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0]);
+    const [paymentOption, setPaymentOption] = useState("COD");
 
-        {
-            name: "Fresh Strawberries",
-            description: [
-                "Sweet and juicy flavor",
-                "Rich in antioxidants and vitamin C",
-                "Perfect for smoothies, desserts, or snacking"
-            ],
-            offerPrice: 180,
-            price: 150,
-            quantity: 1,
-            size: "500g",
-            image: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSJxlHWv_YX7tjnOLEZk0WYKTTBuJEeVGDzWs0dPL0a-aX1jlltXhckBU_Hjjyiz5wdLwUKgGEYF6N9wiYjXStWuA",
-            category: "Fruits",
-        },
-        {
-            name: "Alphonso Mangoes",
-            description: [
-                "Rich, tropical taste",
-                "Premium quality from Ratnagiri",
-                "Ideal for juices, desserts, or eating fresh"
-            ],
-            offerPrice: 300,
-            price: 250,
-            quantity: 1,
-            size: "1kg",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIZsfkc2zDCA423IfWyeg_FaRvFs_LyLeMUw&s",
-            category: "Fruits",
-        },
-        {
-            name: "Red Apples",
-            description: [
-                "Crisp and sweet",
-                "High in fiber and vitamin C",
-                "Perfect for a healthy snack"
-            ],
-            offerPrice: 220,
-            price: 180,
-            quantity: 1,
-            size: "1kg",
-            image: "https://5.imimg.com/data5/AK/RA/MY-68428614/apple.jpg",
-            category: "Fruits",
-        },
-    ];
+    const getCart = () => {
+        const tempArray = [];
+        // key represents the product's unique ID (not the field names of the object).
+        for (const key in cartItems) {
+            // Find the product in the products array where the _id matches the key
+            const product = { ...products.find(item => item._id === key) };
+            product.quantity = cartItems[key];   // Add the quantity from cartItems to the product
+            tempArray.push(product);
+        }
+        setCartArray(tempArray)
+    }
 
-    return (
+    useEffect(() => {
+        if (products.length > 0 && cartItems) {
+            getCart();
+        }
+    }, [products, cartItems])
+
+    return products.length > 0 && cartItems ? (
         // ------------------------- PRODUCTS ------------------------- 
-        < div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto" >
+        < div className="flex flex-col md:flex-row mt-16" >
             <div className='flex-1 max-w-4xl'>
                 <h1 className="text-3xl font-medium mb-6">
-                    Shopping Cart <span className="text-sm text-green-700">3 Items</span>
+                    Shopping Cart <span className="text-sm text-green-700">{getCartItemCount()} Items</span>
                 </h1>
 
                 {/* ------- HEADINGS ------- */}
@@ -67,27 +45,31 @@ const Cart = () => {
                 </div>
 
                 {
-                    products.map((product, index) => (
+                    cartArray.map((product, index) => (
                         <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
                             <div className="flex items-center md:gap-6 gap-3">
 
                                 {/* PRODUCT IMAGE  */}
-                                <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded">
-                                    <img className="max-w-full h-full object-cover" src={product.image} alt={product.name} />
+                                <div onClick={() => {
+                                    navigate(`/products/${product.category.toLowerCase()}/${product._id}`);
+                                    scrollTo(0, 0)
+                                }}
+                                    className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded">
+                                    <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} />
                                 </div>
 
                                 {/* Product Details  */}
                                 <div>
                                     <p className="hidden md:block font-semibold">{product.name}</p>
                                     <div className="font-normal text-gray-500/70">
-                                        <p>Size: <span>{product.size || "N/A"}</span></p>
-                                        
+                                        <p>Weight: <span>{product.weight || "N/A"}</span></p>
+
                                         {/* Quantity with options  */}
                                         <div className='flex items-center'>
                                             <p>Qty:</p>
-                                            <select className='outline-none'>
+                                            <select className='outline-none p-4'>
                                                 {
-                                                    Array(5).fill('').map((_, index) => (
+                                                    Array(cartItems[product._id] > 9 ? cartItems[product._id] : 9).fill('').map((_, index) => (
                                                         <option key={index} value={index + 1}>{index + 1}</option>
                                                     ))
                                                 }
@@ -97,19 +79,23 @@ const Cart = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* offer price */}
                             <p className="text-center">${product.offerPrice * product.quantity}</p>
-                            <button className="cursor-pointer mx-auto">
-                                <img src={assets.remove_icon} alt="remove icon" />
+                            <button onClick={() => removeCartItem(product._id)} className="cursor-pointer mx-auto">
+                                <img src={assets.remove_icon} alt="remove icon" className='inline-block w-6 h-6' />
                             </button>
                         </div>)
                     )
                 }
 
                 {/* ------- CONTINUE SHOPPING ------- */}
-                <button className="group cursor-pointer flex items-center mt-8 gap-2 text-green-700 font-medium">
-                    <img src={assets.arrow_right_icon_colored} alt="right arrow" />
+                <button onClick={() => {
+                    navigate('/products');
+                    scrollTo(0, 0);
+                }}
+                    className="group cursor-pointer flex items-center mt-8 gap-2 text-green-700 font-medium">
+                    <img src={assets.arrow_right_icon_colored} alt="right arrow" className='group-hover:translate-x-1 transition' />
                     Continue Shopping
                 </button>
 
@@ -172,7 +158,7 @@ const Cart = () => {
                 </button>
             </div>
         </ div>
-    )
+    ) : null
 }
 
 export default Cart
