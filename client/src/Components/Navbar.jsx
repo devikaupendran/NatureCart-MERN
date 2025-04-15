@@ -6,7 +6,7 @@ import { useAppContext } from '../Contexts/AppContext';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
-    const { user, setUser, navigate, setShowUserLogin, searchQuery, setSearchQuery } = useAppContext();
+    const { user, setUser, navigate, setShowUserLogin, searchQuery, setSearchQuery, getCartItemCount } = useAppContext();
 
     // Logout handler
     const logout = async () => {
@@ -44,7 +44,9 @@ const Navbar = () => {
                 {/* cart */}
                 <div onClick={() => navigate('/cart')} className="relative cursor-pointer">
                     <img src={assets.nav_cart_icon} alt="cart icon" />
-                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-700 w-[18px] h-[18px] rounded-full">0</button>
+                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-700 w-[18px] h-[18px] rounded-full">
+                        {getCartItemCount()}
+                    </button>
                 </div>
 
                 {/* if there is no user then show login button otherwise show profile image with a dropdown (my orders, logout)  */}
@@ -67,9 +69,19 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu Icon*/}
-            <button onClick={() => setOpen(!open)} aria-label="Menu" className="sm:hidden">
-                <img src={assets.menu_icon} alt="mobile menu icon" />
-            </button>
+            <div className='flex items-center gap-6 sm:hidden'>
+                <button onClick={() => setOpen(!open)} aria-label="Menu">
+                    <img src={assets.menu_icon} alt="mobile menu icon" />
+                </button>
+
+                {/* cart */}
+                <div onClick={() => navigate('/cart')} className="relative cursor-pointer">
+                    <img src={assets.nav_cart_icon} alt="cart icon" />
+                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-700 w-[18px] h-[18px] rounded-full">
+                        {getCartItemCount()}
+                    </button>
+                </div>
+            </div>
 
             {/* ------------------- Mobile Menu ------------------- */}
             {
